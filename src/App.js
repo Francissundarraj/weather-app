@@ -53,7 +53,7 @@ function App() {
   const [lowTemp, setLow] = useState("")
   const [humidity, SetHum] = useState("")
   const [windspeed, setSpeed] = useState("")
-  const [airLevel, setAirLevel] = useState("null")
+  const [airLevel, setAirLevel] = useState(null)
   const [airImage, setAirImage] = useState("")
   
   
@@ -70,10 +70,11 @@ function App() {
 
   const airEmoji = [goode,faire,moderatee,poore,verypoore]
 
-  function airEmojiIndicator (){
-
-    setAirImage(airEmoji[airLevel -1])
-  }
+  useEffect(() => {
+    if (airLevel) {
+      setAirImage(airEmoji[airLevel - 1]);
+    }
+  }, [airLevel]);
 
 
   function citySelect(event) {
@@ -147,7 +148,7 @@ function App() {
       })
       .then(function (airSuccess) {
         setAirLevel(airSuccess.data.list[0].main.aqi);
-        airEmojiIndicator();
+       
         
       })
       
