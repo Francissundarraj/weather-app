@@ -157,7 +157,7 @@ function App() {
         const longitude = success.data.coord.lon;
   
         
-        return axios(`http://api.openweathermap.org/data/2.5/air_pollution?lat=${latitude}&lon=${longitude}&appid=b0c59e311c9144243c6384e15e7696c6`);
+        return axios(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${latitude}&lon=${longitude}&appid=b0c59e311c9144243c6384e15e7696c6`);
       })
       .then(function (airSuccess) {
         setAirLevel(airSuccess.data.list[0].main.aqi);
