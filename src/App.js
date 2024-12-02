@@ -17,7 +17,7 @@ import silent from "./assets/silence.png"
 
 import clear from "./assets/weather/clear.gif"
 import clouds from "../src/assets/weather/clouds2.gif"
-import mist from "./assets/weather/mist.gif"
+import mist from "./assets/weather/mist2.gif"
 import rain from "./assets/weather/rain1.gif"
 import snow from "./assets/weather/snow2.gif"
 import sun from "../src/assets/weather/sun.gif"
@@ -46,13 +46,16 @@ import verypoore from "./assets/verypoor1.gif"
 function App() {
 
   const [city, setCity] = useState("")
+  const [cityName,setCityName]= useState("")
   const [weather, setweather] = useState("")
   const [weatherDesc, setDesc] = useState("")
+  const [weatherImage,setWeatherImage]= useState("")
   const [temperature, setTemp] = useState("")
   const [highTemp, setHigh] = useState("")
   const [lowTemp, setLow] = useState("")
   const [humidity, SetHum] = useState("")
   const [windspeed, setSpeed] = useState("")
+  const [visibility,setVisibility] = useState("")
   const [airLevel, setAirLevel] = useState(null)
   const [airImage, setAirImage] = useState("")
   
@@ -62,13 +65,19 @@ function App() {
 
 
   const airIndicator = [good, fair, moderate, poor, veryPoor]
-
-
-
   const airQualityIndicator = airIndicator[airLevel - 1]
-
-
   const airEmoji = [goode,faire,moderatee,poore,verypoore]
+
+  const weatherImages = {Clear:clear,  Clouds: clouds,  Mist: mist,  Haze: mist,  Fog: mist, Rain: rain,
+    Drizzle:rain, Snow: snow, Sunny: sun, Thunderstorm: thunder,Wind: wind}
+
+  useEffect(() => {
+    if (weather && weatherImages[weather]) {
+      setWeatherImage(weatherImages[weather]);
+    }
+  }, [weather])
+
+
 
   useEffect(() => {
     if (airLevel) {
@@ -131,13 +140,17 @@ function App() {
 
 
         setweather(success.data.weather[0].main);
+        setCityName(success.data.name)
+        console.log(success.data)
        setDesc(success.data.weather[0].description)
         setHigh(success.data.main.temp_max);
         setLow(success.data.main.temp_min);
         SetHum(success.data.main.humidity);
         setSpeed(success.data.wind.speed);
+        setVisibility(success.data.visibility)
+        console.log(success.data.visibility)
        
-        console.log(success.data.weather[0].description)
+        
   
         // Define latitude and longitude here
         const latitude = success.data.coord.lat;
@@ -204,9 +217,9 @@ function App() {
 
 
           <div className='flex flex-col items-center'>
-            <h1 className='text-2xl'>{city}</h1>
+            <h1 className='text-2xl'>{cityName}</h1>
             <p className=' '>Today,{currenDate}</p>
-            <img className='h-36' src={rain} alt="" />
+            {weatherImage && <img className=' h-32 rounded-xl' src={weatherImage} alt={weather} />}
             <h1 className='text-5xl'>{temperature} °C</h1>
             <h1 className='text-2xl'>{weather}</h1>
           </div>
@@ -226,10 +239,6 @@ function App() {
                 <img className='h-5' src={hight} alt="" />
               </div>
             </div>
-
-
-
-
 
             <div className='flex  items-center justify-between text-white  text-md p-2 '>
               <div >
@@ -253,9 +262,6 @@ function App() {
               </div>
             </div>
 
-
-
-
             <div className='flex  items-center justify-between text-white  text-md p-2'>
               <div >
                 <h2>Wind</h2>
@@ -266,8 +272,6 @@ function App() {
                 <img className='h-5' src={windy} alt="" />
               </div>
             </div>
-
-
 
           </div>
 
@@ -293,13 +297,26 @@ function App() {
           </div>
 
 
-          <div className='flex flex-col items-center'>
-            <h1 className='text-2xl'>Weather Description</h1>
-            <p >{weatherDesc}</p>
-            <img className='h-36' src={airImage} alt="" />
-            <h1 className='text-5xl'>Air Quality</h1>
+          <div className='flex flex-col items-center '>
 
-            <img  src={airQualityIndicator} alt="" />
+
+            <div className='text-center p-5 gradient-background  rounded-lg '>
+            <div className='flex justify-between m-1 items-center gap-5'>
+            <h1 className='text-md'>Description</h1>
+            <p className='text-md'>{weatherDesc}</p>
+            </div>
+
+            <div className='flex justify-between items-center m-1 gap-5'>
+            <h1 className='text-md'>Visibility</h1>
+            <p className='text-md'>{visibility}</p>
+            </div>
+            </div>
+            <h1 className='text-5xl mt-4'>Air Quality</h1>
+            <img className='h-28' src={airQualityIndicator} alt="" />
+            <img className='h-36' src={airImage} alt="" />
+            
+
+            
 
           </div>
 
@@ -315,19 +332,7 @@ function App() {
 
 
 
-        {/* container 3 */}
-
-       
-
-
-
-
-
-
-
-
-
-
+        
 
 
 
